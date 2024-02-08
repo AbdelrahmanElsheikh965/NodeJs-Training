@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://localhost:3000/style">
+</head>
+<body>
+
+<h2>Todos</h2>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Status</th>
+  </tr>
+  <tbody id="data-list"></tbody>
+</table>
+
+<script>
+
+  // Equals = http://localhost:3000/data
+  fetch('/data')
+        .then(response => response.json())
+        .then(dataArray => {
+
+            var gal = document.getElementById('data-list');
+            for (var i = 0; i < dataArray.length ; i++) {
+                gal.innerHTML += `
+                      <tr>
+                        <td>  ${dataArray[i].title} </td>
+                        <td>  ${dataArray[i].status} </td>
+                      </tr>
+                `;
+            };
+         
+        })
+        .catch(error => console.error('Error fetching data:', error));
+  
+  </script>
+
+</body>
+</html>

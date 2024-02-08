@@ -1,70 +1,88 @@
+const http = require('http');
 const fs = require('fs');
-const server = require('http');
+const path = require('path');
 
-// change this scope
-var todosData = '';
+const server = http.createServer((req, res) => {
 
-/**
- * Use streams for the image (think of chunking - buffer - concat())
- * Add a description below it
- * Style the home page with css files (think of .replace())
- * Make an option to download the image (usually using a button)
- */
+  if (req.url === '/') {
+    const indexPath = path.join(__dirname, 'index.html');
+    fs.readFile(indexPath, 'utf8', (err, htmlContent) => {
+      if (err) {
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.end('Internal Server Error');
+        return;
+      }
+      const dynamicData = { greeting: 'Hello, World!' };
+      const modifiedHtml = htmlContent.replace('{{greeting}}', dynamicData.greeting);
+      res.setHeader('Content-Type', 'text/html');
+      res.end(modifiedHtml);
+    });
+  }
 
-/** -----------Todos File ----------------------- */
-const readStream = fs.createReadStream('todos.json');
-readStream.setEncoding('UTF8');
+  else if (req.url === '/data') {
+    let todosData = '';
+    const readStream = fs.createReadStream('todos.json', { encoding: 'utf8' });
+    readStream.on('data', (chunkOfData) => {
+      todosData += chunkOfData;
+    });
+    readStream.on('end', () => {
+      const jsonData = JSON.parse(todosData);
+      for (const todo of jsonData) delete todo.id;
+      const finalData = JSON.stringify(jsonData, null, "\t");
+      res.setHeader('Content-Type', 'application/json');
+      res.write(finalData);
+      res.end();
+    });
+    readStream.on('error', (error) => {
+      console.error('Error reading file:', error);
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end('Internal Server Error');
+    });
+  }
 
-readStream.on('data', (chunckOfData) => {
-    todosData += chunckOfData;
+  else if (req.url === '/style') {
+    const cssPath = path.join(__dirname, 'style.css');
+    const readStream = fs.createReadStream(cssPath);
+    res.setHeader('Content-Type', 'text/css');
+    readStream.pipe(res);
+  }
+
+  else if (req.url === '/get-image') {
+    const imagePath = 'image.jpg';
+    const readStream = fs.createReadStream(imagePath);
+    res.setHeader('Content-Type', 'image/jpg');   // optional but nice to have
+    readStream.pipe(res);
+  }
+
+  else if (req.url === '/download') {
+    const imagePath = path.join(__dirname, 'image.jpg');
+    res.setHeader('Content-Disposition', 'attachment; filename="image.jpg"');
+    res.setHeader('Content-Type', 'image/jpg');
+    const readStream = fs.createReadStream(imagePath);
+    readStream.pipe(res);
+  }
+
+  else if (req.url === '/astronomy') {
+    res.write('<html>');
+    res.write('<head><title>image</title></head>')
+    res.write('<body> <img src="http://localhost:3000/get-image" width="600px" height="400px"> <br><br> </body>')
+    res.write('<strong> Desc : </strong> this is a description for it </strong>')
+    res.write('<a href="http://localhost:3000/download"> Download')
+    res.write('</html>');
+    res.end();
+  }
+
+  else {
+    res.write('<html>');
+    res.write('<head><title>Nothing is here</title></head>')
+    res.write('<body> 404 </body>')
+    res.write('</html>');
+    res.end();
+  }
+
 });
 
-// check if there are any errors
-readStream.on('error', (err) => {
-    console.error(err)
-})
-
-// res.end() position is very important
-
-// initiate a server
-server.createServer(function (req, res) {
-
-    if (req.url === '/') {
-        // convert from string to Json
-        var newData = JSON.parse(todosData);
-
-        // delete id for each todo element
-        for (var todo of newData) {
-            delete todo.id;
-        }
-
-        // convert back again to string with pretty presentation
-        const FinalData = JSON.stringify(newData, null, "\t")
-        res.write(FinalData);
-        res.end();
-
-    }else if (req.url === '/astronomy') {
-
-        fs.readFile('image.jpg', (err, data) => {
-            if (err) {
-                res.writeHead(500, {'Content-Type' : 'text/plain'});
-                res.end('Internal Server Error');
-            } else {
-                res.writeHead(200, {'Content-Type' : 'image/jpeg'})
-                res.end(data)
-            }
-        });
-
-    } else {
-
-        res.write('<html>');
-        res.write('<head><title>No</title></head>')
-        res.write('<body> 404 </body>')
-        res.write('</html');
-        res.end();
-    }
-
-    // write to the response
-}).listen(3000, () => console.log('listening ...'));
-
-
+const port = 3000;
+server.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
