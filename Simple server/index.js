@@ -3,7 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 const server = http.createServer((req, res) => {
-
+  
+  // ------------- Home Routes --------------------------------------
   if (req.url === '/') {
     const indexPath = path.join(__dirname, 'index.html');
     fs.readFile(indexPath, 'utf8', (err, htmlContent) => {
@@ -12,13 +13,13 @@ const server = http.createServer((req, res) => {
         res.end('Internal Server Error');
         return;
       }
-      const dynamicData = { greeting: 'Hello, World!' };
-      const modifiedHtml = htmlContent.replace('{{greeting}}', dynamicData.greeting);
       res.setHeader('Content-Type', 'text/html');
-      res.end(modifiedHtml);
+      res.end(htmlContent);
     });
   }
 
+  
+  // ------------- Data Routes --------------------------------------
   else if (req.url === '/data') {
     let todosData = '';
     const readStream = fs.createReadStream('todos.json', { encoding: 'utf8' });
@@ -40,6 +41,8 @@ const server = http.createServer((req, res) => {
     });
   }
 
+
+  // ------------- CSS Style Routes --------------------------------------
   else if (req.url === '/style') {
     const cssPath = path.join(__dirname, 'style.css');
     const readStream = fs.createReadStream(cssPath);
@@ -47,6 +50,8 @@ const server = http.createServer((req, res) => {
     readStream.pipe(res);
   }
 
+
+  // ------------- Image Routes --------------------------------------
   else if (req.url === '/get-image') {
     const imagePath = 'image.jpg';
     const readStream = fs.createReadStream(imagePath);
@@ -62,6 +67,8 @@ const server = http.createServer((req, res) => {
     readStream.pipe(res);
   }
 
+
+  // ------------- astronomy Routes --------------------------------------
   else if (req.url === '/astronomy') {
     res.write('<html>');
     res.write('<head><title>image</title></head>')
@@ -72,6 +79,8 @@ const server = http.createServer((req, res) => {
     res.end();
   }
 
+  
+  // ------------- 404 - Not found Routes --------------------------------------
   else {
     res.write('<html>');
     res.write('<head><title>Nothing is here</title></head>')
