@@ -1,10 +1,9 @@
 const { program } = require('commander');
 const fs = require('fs');
 
-
 program.version('1.5.0');
 
-program
+program // Every program/command must have 1 action() or the last will overwrite others before. 
     .command('edit')
     .description('To edit todo title, or status by id')
     .alias('e')
@@ -59,7 +58,6 @@ program.parse(process.argv);
  * @param {*} statusToFilterBy 
  */
 function list(statusToFilterBy){
-    console.log(statusToFilterBy);
     if (checkFile()) {
         var todos = checkFile();
         if (statusToFilterBy) {
@@ -84,7 +82,7 @@ function deleteTodo() { // delete is reserved as keyword in VS code
 
             // Re-assigns only todos excluding the target one (delete mechanism).
             todos = todos.filter((todo) => todo.id !== parseInt(process.argv[3]));
-            fs.writeFile('./todos.json', JSON.stringify(todos), () => {});
+            fs.writeFile('./todos.json', JSON.stringify(todos, null, "\t"), () => {});
 
         } else {
             console.warn("404 - Not Found!");
@@ -100,8 +98,6 @@ function deleteTodo() { // delete is reserved as keyword in VS code
  * Edits todo by id
  */
 function edit(indexOfId, indexOfField) {
-    console.log("indexOfId:", indexOfId, "indexOfField:", indexOfField);
-
     if (checkFile() && process.argv[indexOfId]) {
         var todos = checkFile();
 
@@ -124,7 +120,7 @@ function edit(indexOfId, indexOfField) {
 
             // writeFile needs callback as a second argument as it returns ...
             // but writeFileSync doesn't as it does not return ....
-            fs.writeFile('./todos.json', JSON.stringify(todos), () => {});
+            fs.writeFile('./todos.json', JSON.stringify(todos, null, "\t"), () => {});
 
         } else {
             console.warn("Check your input!");
@@ -153,7 +149,7 @@ function add() {
         };
 
         todos.push(todo);
-        fs.writeFile('./todos.json', JSON.stringify(todos), () => {});  // stringify when write
+        fs.writeFile('./todos.json', JSON.stringify(todos, null, "\t"), () => {});  // stringify when write
     }else{
         console.error("Check your input");
     }
