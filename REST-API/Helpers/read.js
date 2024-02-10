@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 function read(req, res) {
-    fs.readFile('todos.json', 'utf8', (err, data) => {
+    fs.readFile('./todos.json', 'utf8', (err, data) => {
         try {
             let todosData = JSON.parse(data);
             // res.json(todosData);

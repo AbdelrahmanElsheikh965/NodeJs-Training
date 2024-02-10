@@ -15,11 +15,6 @@
     "status": "to-do"
   },
   {
-    "id": 8,
-    "title": "hisppppppppppp",
-    "status": "kk"
-  },
-  {
     "id": 9,
     "title": 5,
     "status": "to-do"
@@ -40,11 +35,6 @@
     "status": "done"
   },
   {
-    "id": 13,
-    "title": "assssssssssssssssda",
-    "status": "to-do"
-  },
-  {
     "id": 14,
     "title": "Mohammed",
     "status": "in-progress"
@@ -57,6 +47,11 @@
   {
     "id": 16,
     "title": "ali-mohamed-",
+    "status": "to-do"
+  },
+  {
+    "id": 17,
+    "title": "bewbewbewbewbew",
     "status": "to-do"
   }
 ]
