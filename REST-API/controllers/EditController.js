@@ -8,9 +8,8 @@ function create(req, res) {
     try {
         let todosData = JSON.parse(Todo.getAllData());
 
-        if (typeof title !== 'string' || title.length < 10) {
-            res.send('Error, Check your input...').status('403')
-        } else {
+        if (!(typeof title !== 'string' || title.length < 10))
+        {
             const newTodo = {
                 id: (todosData.length > 0) ? todosData[todosData.length - 1].id + 1 : 1,
                 title: req.body.title,
@@ -20,7 +19,7 @@ function create(req, res) {
             todosData.push(newTodo);
             fs.writeFileSync('./todos.json', JSON.stringify(todosData, null, 2))
             res.send(newTodo);
-        }
+        } else res.send('Error, Check your input...').status('403')
 
     } catch (error) {
         res.status('404').send(`error: Not found`);
@@ -35,17 +34,16 @@ function update(req, res) {
         const allowedStatuses = ["to-do", "done", "in-progress"];
 
         // validation
-        if (typeof title !== 'string' || !allowedStatuses.includes(status)) {
-            res.status(403).send("Bad input")
-        } else {
-
+        if (!(typeof title !== 'string' || !allowedStatuses.includes(status))) 
+        {
             target.id = (req.body.id) ?? target.id
             target.title = (req.body.title) ?? target.title
             target.status = (req.body.status) ?? target.status
-
             fs.writeFileSync('./todos.json', JSON.stringify(todosData, null, 2))
             res.send(target);
-        }
+        }    
+         else res.status(403).send("Bad input")
+
     };
 
     // passing a reference to a function as a callback
@@ -60,8 +58,15 @@ function deleteTodo(req, res) {
     })
 }
 
+
+function deleteAll(req, res) {
+    Todo.deleteAllData();
+    res.send('All deleted');
+}
+
 module.exports = {
     create,
     update,
-    deleteTodo
+    deleteTodo,
+    deleteAll
 }

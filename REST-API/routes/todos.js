@@ -1,8 +1,5 @@
-// const read = require('./controllers/read');
 const EditController = require('../controllers/EditController');
 const readController = require('../controllers/ReadController');
-
-const fs = require('fs');
 const router = require('express').Router();
 
 
@@ -21,7 +18,6 @@ router.post('/', (req, res) => {
     EditController.create(req, res);
 })
 
-
 // Update a resource + Validation if not found + Validation on input
 router.patch('/:id', (req, res) => {
     EditController.update(req, res)
@@ -30,6 +26,11 @@ router.patch('/:id', (req, res) => {
 // Delete a resource + Validation if not found
 router.delete('/:id', (req, res) => {
     EditController.deleteTodo(req, res)
+})
+
+// Delete all
+router.delete('/', (req, res) => {
+    EditController.deleteAll(req, res)
 })
 
 module.exports = router

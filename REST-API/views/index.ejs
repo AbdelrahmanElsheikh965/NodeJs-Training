@@ -22,14 +22,21 @@
                 <th>Title</th>
                 <th>Status</th>
             </tr>
-            
-            <% data.forEach(todo => { %>
+            <% if(data && data.length > 0) { %>
+                <% data.forEach(todo => { %>
+                    <tr>
+                            <td><%= todo.id %></td>
+                            <td><%= todo.title %></td>
+                            <td><%= todo.status %></td>
+                    </tr>
+                <% }); %>
+            <% }else{ %>
                 <tr>
-                        <td><%= todo.id %></td>
-                        <td><%= todo.title %></td>
-                        <td><%= todo.status %></td>
+                    <td>No data</td>
+                    <td>No data</td>
+                    <td>No data</td>
                 </tr>
-            <% }); %>
+            <% } %>
         </table>
 
     </main>

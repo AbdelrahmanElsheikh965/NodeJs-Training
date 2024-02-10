@@ -1,56 +1,21 @@
 [
   {
+    "id": 1,
+    "title": "new hello todos",
+    "status": "done"
+  },
+  {
+    "id": 2,
+    "title": "new hello todos",
+    "status": "done"
+  },
+  {
     "id": 3,
-    "title": "gtfrd",
-    "status": "in-progress"
-  },
-  {
-    "id": 7,
-    "title": "new2",
-    "status": "to-do"
-  },
-  {
-    "id": 9,
-    "title": 5,
-    "status": "to-do"
-  },
-  {
-    "id": 10,
     "title": "new hello todos",
     "status": "done"
   },
   {
-    "id": 11,
-    "title": "new hello todos",
-    "status": "done"
-  },
-  {
-    "id": 12,
-    "title": "Mohammed",
-    "status": "done"
-  },
-  {
-    "id": 14,
-    "title": "Mohammed",
-    "status": "in-progress"
-  },
-  {
-    "id": 15,
-    "title": "9qqqqqqqqqqqqqq",
-    "status": "to-do"
-  },
-  {
-    "id": 16,
-    "title": "ali-mohamed-",
-    "status": "to-do"
-  },
-  {
-    "id": 17,
-    "title": "bewbewbewbewbew",
-    "status": "to-do"
-  },
-  {
-    "id": 18,
+    "id": 4,
     "title": "new hello todos",
     "status": "to-do"
   }
